@@ -1,0 +1,12 @@
+.git
+.gitignore
+README.md
+.vscode/
+.idea/
+*.log
+Dockerfile
+nginx.conf.template
+entrypoint.sh
+.env
+.env.local
+.env.*.local
