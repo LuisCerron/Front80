@@ -1,6 +1,5 @@
 # ========================================
 # Dockerfile - Frontend Nginx para Dokploy
-# Build context: raíz del repo
 # ========================================
 FROM nginx:alpine
 
@@ -8,16 +7,16 @@ FROM nginx:alpine
 RUN apk add --no-cache gettext
 
 # Copiar todos los archivos estáticos del frontend
-COPY Fronted/ /usr/share/nginx/html/
+COPY . /usr/share/nginx/html/
 
 # Copiar la plantilla de configuración de nginx
-COPY Fronted/nginx.conf.template /etc/nginx/conf.d/default.conf.template
+COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
 # Copiar el script de entrada
-COPY Fronted/entrypoint.sh /docker-entrypoint.sh
+COPY entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Eliminar archivos de build del web root (limpieza)
+# Limpiar archivos de build del web root
 RUN rm -f /usr/share/nginx/html/Dockerfile \
           /usr/share/nginx/html/nginx.conf.template \
           /usr/share/nginx/html/entrypoint.sh \
