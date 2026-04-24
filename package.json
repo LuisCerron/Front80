@@ -1,0 +1,12 @@
+{
+  "name": "frontend-estacionamiento",
+  "version": "1.0.0",
+  "description": "Frontend para Sistema de Estacionamiento UTP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

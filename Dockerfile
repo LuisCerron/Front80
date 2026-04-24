@@ -1,37 +1,24 @@
 # ========================================
-# Dockerfile - Frontend Nginx para Dokploy
+# Dockerfile - Frontend Node.js para Dokploy
+# Sin nginx. Usamos Express para servir estáticos.
 # ========================================
-FROM nginx:alpine
+FROM node:20-alpine
 
-# Instalar envsubst para reemplazar variables en la plantilla
-RUN apk add --no-cache gettext
+WORKDIR /app
 
-# Copiar todos los archivos estáticos del frontend
-COPY . /usr/share/nginx/html/
+# Copiar archivos de dependencias e instalar
+COPY package.json ./
+RUN npm install --only=production && npm cache clean --force
 
-# Copiar la plantilla de configuración de nginx
-COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
-
-# Copiar el script de entrada
-COPY entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-# Limpiar archivos de build del web root
-RUN rm -f /usr/share/nginx/html/Dockerfile \
-          /usr/share/nginx/html/nginx.conf.template \
-          /usr/share/nginx/html/entrypoint.sh \
-          /usr/share/nginx/html/.dockerignore \
-          /usr/share/nginx/html/.env.example
-
-# Eliminar la configuración por defecto de nginx
-RUN rm -f /etc/nginx/conf.d/default.conf
+# Copiar todo el frontend
+COPY . .
 
 # Healthcheck para Dokploy
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-80}/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-3000}/health || exit 1
 
 # Exponer el puerto (Dokploy lo mapea automáticamente)
-EXPOSE ${PORT:-80}
+EXPOSE ${PORT:-3000}
 
-# Usar nuestro script de entrada personalizado
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Comando de inicio
+CMD ["node", "server.js"]
