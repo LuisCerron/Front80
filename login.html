@@ -30,7 +30,8 @@
     </form>
   </div>
 
- <script>
+  <script src="api-config.js"></script>
+  <script>
     function togglePasswordState() {
       const codigoInput = document.getElementById('codigo');
       const claveInput = document.getElementById('clave');
@@ -85,7 +86,7 @@
           }
       }
     try {
-        const response = await fetch('/api/login', {
+        const response = await fetch((window.API_BASE_URL || '/api') + '/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ codigo: codigo, clave: clave, rol: rol })

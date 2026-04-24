@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ DOM cargado. Inicializando script v4.1...");
 
     // --- REFERENCIAS GLOBALES ---
-    const API_BASE_URL = window.location.origin + '/api';
+    const API_BASE_URL = (window.API_BASE_URL || (window.location.origin + '/api')).replace(/\/$/, '');
 
     // Elementos del DOM
     const contentSections = document.querySelectorAll('.content-section');

@@ -32,6 +32,7 @@
 
     </div>
 
+    <script src="api-config.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('search-input');
@@ -60,7 +61,7 @@
             }
 
             try {
-                const response = await fetch(`/api/reservas/activas/${busqueda}`);
+                const response = await fetch(`${window.API_BASE_URL || '/api'}/reservas/activas/${busqueda}`);
                 if (!response.ok) throw new Error('Error en el servidor.');
                 
                 const registros = await response.json();
@@ -150,7 +151,7 @@
                 boton.disabled = true;
                 boton.textContent = 'Procesando...';
                 try {
-                    const response = await fetch('/api/reservas/confirmar-ingreso', {
+                    const response = await fetch((window.API_BASE_URL || '/api') + '/reservas/confirmar-ingreso', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id_reserva: idReserva })
@@ -175,7 +176,7 @@
                 boton.textContent = 'Procesando...';
                 try {
                     // Esta ruta ya la tienes en tu script principal para registrar la salida
-                    const response = await fetch(`/api/accesos/${idAcceso}`, { method: 'DELETE' });
+                    const response = await fetch(`${window.API_BASE_URL || '/api'}/accesos/${idAcceso}`, { method: 'DELETE' });
                     const resultado = await response.json();
                     if (!response.ok) throw new Error(resultado.error || 'Error desconocido');
                     alert(resultado.message);
