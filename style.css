@@ -1,0 +1,1764 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --header-color: #f39c12;
+    --text-color: #ecf0f1;
+    --active-color: #27ae60;
+    --danger-color: #e74c3c;
+    --edit-color: #3498db;
+    --bg-color: #ecf0f1;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: var(--bg-color);
+    color: #333;
+}
+
+/* --- Barra Lateral --- */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    /* Para que el sidebar no se solape con el contenido principal */
+    z-index: 900;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background-color: var(--secondary-color);
+    text-align: center;
+}
+
+.sidebar-header h3 {
+    font-weight: 700;
+}
+
+.sidebar-menu {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.sidebar-menu li a {
+    display: block;
+    padding: 15px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.sidebar-menu li a:hover, .sidebar-menu li.active a {
+    background-color: var(--secondary-color);
+    border-left: 4px solid var(--header-color);
+    padding-left: 16px;
+}
+
+.sidebar-menu li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 15px;
+    text-align: center;
+    font-size: 0.8em;
+    color: #bdc3c7;
+}
+
+
+/* --- Contenido Principal --- */
+.main-content {
+    margin-left: 250px; /* Para dejar espacio al sidebar */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: var(--header-color);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para el encabezado */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid var(--white);
+    object-fit: cover; /* Asegura que la imagen se vea bien */
+}
+
+.user-info div {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info small {
+    font-size: 0.8em;
+    opacity: 0.9;
+}
+
+.search-bar {
+    display: flex;
+}
+
+.search-bar input {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    font-size: 0.9em;
+    width: 250px;
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    border: none;
+    background: var(--primary-color);
+    color: var(--white);
+    cursor: pointer;
+    border-radius: 0 20px 20px 0;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #243445; /* Tono más oscuro al pasar el ratón */
+}
+
+main {
+    padding: 30px;
+    flex-grow: 1; /* Para que ocupe el espacio restante */
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.toolbar h2 {
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el icono y el texto */
+}
+
+.btn-new-register {
+    background-color: var(--active-color);
+    color: var(--white);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+}
+
+.btn-new-register:hover {
+    background-color: #218c54;
+}
+
+.table-container {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow-x: auto; /* Permite el scroll horizontal en tablas grandes */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+thead th {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    font-weight: 600;
+    text-transform: uppercase; /* Mayúsculas para los encabezados */
+    font-size: 0.9em;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: var(--white);
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block; /* Para que padding y border-radius funcionen bien */
+}
+
+.status.active { background-color: var(--active-color); }
+.status.inactive { background-color: var(--danger-color); }
+
+.action-buttons {
+    display: flex;
+    gap: 8px; /* Espacio entre los botones de acción */
+}
+
+.action-buttons button {
+    border: none;
+    padding: 8px 12px; /* Añadido un poco más de padding horizontal */
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    font-size: 0.9em;
+    transition: opacity 0.3s ease;
+}
+
+.action-buttons button:hover {
+    opacity: 0.8;
+}
+
+.btn-view { background-color: var(--edit-color); }
+.btn-edit { background-color: var(--header-color); }
+.btn-delete { background-color: var(--danger-color); }
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.pagination span {
+    margin-right: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    background: var(--white);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination button.active, .pagination button:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+}
+
+/* Manejo de secciones de contenido */
+.content-section {
+    display: none; /* Oculta todas las secciones por defecto */
+    min-height: calc(100vh - 120px); /* Altura mínima para el contenido */
+}
+
+/* Muestra solo la sección que tiene la clase 'active' */
+.content-section.active {
+    display: block;
+}
+
+/* --- ESTILOS PARA LA SECCIÓN DE ESPACIOS (DOS PANELES) --- */
+.two-panel-layout {
+    display: flex;
+    gap: 30px; /* Espacio entre los dos paneles */
+    align-items: flex-start; /* Alinea los paneles al inicio */
+}
+
+.panel-left {
+    flex: 1.5; /* El panel izquierdo será un poco más grande */
+}
+
+.panel-right {
+    flex: 1; /* El panel derecho será más pequeño */
+}
+
+.panel-left .table-container, .panel-right .details-container {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    /* Ajusta la altura dinámicamente si es necesario, o usa min-height */
+    min-height: 400px; /* Altura mínima para que ambos paneles se vean bien */
+}
+
+#spacesTable tbody tr {
+    cursor: pointer;
+}
+
+#spacesTable tbody tr.selected-row {
+    background-color: #e0f2f7; /* Un color azul claro para la fila seleccionada */
+    font-weight: bold;
+}
+
+.details-container .placeholder {
+    color: #777;
+    text-align: center;
+    margin-top: 50px;
+    font-style: italic;
+}
+
+.details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.details-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+    align-items: center;
+}
+
+.details-list li:last-child {
+    border-bottom: none;
+}
+
+.details-list li strong {
+    color: var(--primary-color);
+}
+
+/* Estilos de estado para espacios */
+.estado {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.disponible {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.ocupado {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+}
+
+/* Estilos de estado para usuarios */
+.user-table .status-inside {
+    background-color: var(--active-color); /* Verde, para "Dentro" */
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.user-table .status-outside {
+    background-color: var(--danger-color); /* Rojo, para "Fuera" */
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.add-user-button {
+    background-color: var(--active-color);
+    color: var(--white);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+}
+
+.add-user-button:hover {
+    background-color: #218838;
+}
+
+/* --- Estilos para el Modal (Formulario Flotante) --- */
+.modal {
+    display: none; /* <--- ¡CORREGIDO! Solo display: none; aquí */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    /* Las propiedades de flexbox se aplicarán cuando JavaScript cambie el 'display' a 'flex' */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--white);
+    /* margin: auto; Ya no es estrictamente necesario con flexbox, pero no hace daño */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out; /* Animación de aparición */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8em;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 600;
+}
+
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+    border-color: var(--header-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+}
+
+.btn-save {
+    background-color: var(--active-color);
+    color: var(--white);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}
+
+/* Media Queries para Responsive Design */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 200px;
+    }
+    .search-bar input {
+        width: 180px;
+    }
+    .two-panel-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .panel-left, .panel-right {
+        flex: none; /* Desactiva el flex para ocupar el ancho completo */
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px; /* Sidebar más compacto */
+    }
+    .sidebar-header h3 {
+        font-size: 0.8em;
+    }
+    .sidebar-menu li a {
+        padding: 15px 10px;
+        text-align: center;
+    }
+    .sidebar-menu li a span {
+        display: none; /* Oculta el texto de los enlaces */
+    }
+    .sidebar-menu li a i {
+        margin-right: 0;
+        width: auto; /* Ajusta el ancho para el icono */
+    }
+    .sidebar-footer {
+        display: none; /* Oculta el pie de página del sidebar */
+    }
+
+    .main-content {
+        margin-left: 80px; /* Ajusta el margen para el sidebar compacto */
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+    }
+    .search-bar {
+        width: 100%;
+        justify-content: center;
+    }
+    .search-bar input {
+        width: calc(100% - 40px); /* Ancho completo menos el botón */
+    }
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    main {
+        padding: 20px;
+    }
+    th, td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .action-buttons button {
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px; /* Sidebar aún más pequeño */
+    }
+    .main-content {
+        margin-left: 60px;
+    }
+    header {
+        padding: 10px;
+    }
+    .user-info .avatar {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+    .user-info strong {
+        font-size: 0.9em;
+    }
+    .search-bar input {
+        font-size: 0.8em;
+    }
+    .btn-new-register, .add-user-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+    .modal-content h3 {
+        font-size: 1.5em;
+    }
+    .form-group label {
+        font-size: 0.9em;
+    }
+    .form-group input, .form-group select {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .btn-save {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
+
+/* =================================
+   ESTILOS PARA LA SECCIÓN DE REPORTES
+   ================================= */
+
+/* Subtítulo descriptivo debajo del H2 principal */
+#reportes .subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-top: -5px; /* Ajuste para que esté más cerca del título */
+    margin-bottom: 30px;
+}
+
+/* Contenedor Grid para las tarjetas de categorías */
+#reportes .reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* Estilo general de las tarjetas de categoría */
+#reportes .report-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#reportes .report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de cada tarjeta */
+#reportes .card-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ecf0f1;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+#reportes .card-header i {
+    font-size: 1.6rem;
+    margin-right: 15px;
+}
+
+#reportes .card-header h3 {
+    margin: 0;
+    font-size: 1.3rem; /* Ajustado de H2 a H3 */
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Colores de iconos específicos por categoría */
+#reportes .report-card.ocupacion .card-header i { color: #27ae60; } /* Verde */
+#reportes .report-card.financiero .card-header i { color: #f39c12; } /* Naranja */
+#reportes .report-card.usuarios .card-header i { color: #8e44ad; } /* Morado */
+#reportes .report-card.admin .card-header i { color: #c0392b; }   /* Rojo */
+
+/* Lista de enlaces a reportes dentro de cada tarjeta */
+#reportes .report-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#reportes .report-list li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    text-decoration: none;
+    color: #34495e;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-weight: 500;
+}
+
+#reportes .report-list li a:hover {
+    background-color: #f5f7fa;
+    color: #2980b9;
+}
+
+#reportes .report-list li a i {
+    width: 25px;
+    text-align: center;
+    margin-right: 12px;
+    color: #7f8c8d;
+}
+
+/* ========================================================== */
+/* === ESTILOS PARA EL MAPA DE ESTACIONAMIENTO EN TIEMPO REAL === */
+/* ========================================================== */
+
+#parking-map-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Estilo general para cada cajón de estacionamiento individual */
+/* Se usa .parking-space para coincidir con el JavaScript actualizado */
+.parking-space {
+    position: relative; /* Necesario para posicionar el icono */
+    border-radius: 8px;
+    padding: 20px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    cursor: default;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Colores de estado para los espacios --- */
+.parking-space.disponible {
+    background-color: #28a745; /* Verde */
+    border: 1px solid #23923d;
+}
+
+.parking-space.ocupado {
+    background-color: #dc3545; /* Rojo */
+    border: 1px solid #c82333;
+}
+
+.parking-space.mantenimiento {
+    background-color: #ffc107; /* Amarillo */
+    color: #333;
+    border: 1px solid #e0a800;
+}
+
+.parking-space.reservado {
+    background-color: #007bff; /* Azul */
+    border: 1px solid #0069d9;
+}
+
+/* --- Estilos para la interactividad de reserva --- */
+.parking-space.clickable {
+    cursor: pointer;
+}
+
+.parking-space.clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+}
+
+/* --- NUEVOS ESTILOS PARA ICONOS Y TIPOS DE ESPACIO --- */
+
+/* Estilo base para los íconos */
+.space-icon {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+/* Visibilidad y color del icono según el estado */
+.parking-space.disponible .space-icon {
+    opacity: 1;
+}
+
+.parking-space.ocupado .space-icon,
+.parking-space.reservado .space-icon {
+    color: white;
+    opacity: 1;
+}
+
+/* Estilos para diferenciar por tipo de espacio */
+.parking-space.tipo-moto.disponible {
+    border-color: #f39c12;
+    color: #f39c12;
+    background-color: white;
+}
+.parking-space.tipo-moto.disponible .space-icon {
+    color: #f39c12;
+}
+.parking-space.tipo-moto.disponible:hover {
+    background-color: #fef9e7;
+}
+
+.parking-space.tipo-discapacitado.disponible {
+    border-color: #3498db;
+    color: #3498db;
+    background-color: white;
+}
+.parking-space.tipo-discapacitado.disponible .space-icon {
+    color: #3498db;
+}
+.parking-space.tipo-discapacitado.disponible:hover {
+    background-color: #eaf5fb;
+}
+
+.parking-space.tipo-discapacitado.ocupado,
+.parking-space.tipo-discapacitado.reservado {
+    background-color: #3498db;
+    border-color: #2980b9;
+}
+
+/* --- Estilos para los botones del modal de reserva --- */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.modal-actions .btn-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6c757d;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-actions .btn-primary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* ========================================================== */
+/* === ESTILOS PARA LA SECCIÓN DE CONFIGURACIÓN (BÚSQUEDA) === */
+/* ========================================================== */
+
+/* Contenedor del filtro de búsqueda */
+#configuracion .filter-container {
+    background-color: #ffffff;
+    padding: 20px 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e9ecef;
+}
+
+#configuracion .filter-container p {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #6c757d;
+}
+
+/* Formulario de búsqueda */
+#searchUserByPlateForm {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Campo de texto para la placa */
+#searchUserByPlateForm input[type="text"] {
+    flex-grow: 1; /* Hace que el input ocupe el espacio disponible */
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchUserByPlateForm input[type="text"]:focus {
+    outline: none;
+    border-color: #495057;
+    box-shadow: 0 0 0 2px rgba(73, 80, 87, 0.25);
+}
+
+/* Botón de búsqueda */
+#searchUserByPlateForm button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #343a40; /* Color oscuro principal */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+#searchUserByPlateForm button:hover {
+    background-color: #495057;
+}
+
+
+/* Estilos para la tabla de resultados de búsqueda */
+#userSearchResultsContainer {
+    margin-top: 20px;
+}
+
+#userSearchResultsBody .btn-edit {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#userSearchResultsBody .btn-edit:hover {
+    background-color: #0056b3;
+}
+
+/* ========================================================== */
+/* === ESTILOS PARA LA SECCIÓN DE CERRAR SESIÓN ============= */
+/* ========================================================== */
+
+.logout-section {
+    margin-top: 40px; /* Espacio superior para separarlo de la tabla */
+    padding-top: 25px;
+    border-top: 1px solid #e9ecef; /* Línea divisoria sutil */
+    /* Limpia el float para que el contenedor se expanda correctamente */
+    overflow: hidden; 
+}
+
+.logout-section h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #343a40;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.logout-section p {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+/* Estilo principal del botón de logout */
+.btn-logout {
+    background-color: #dc3545; /* Rojo de "peligro" o "salir" */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex; /* Para alinear el ícono con el texto */
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    
+    /* ¡Esto lo pone en la esquina derecha! */
+    float: right; 
+}
+
+.btn-logout:hover {
+    background-color: #c82333; /* Rojo más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Efecto de elevación sutil */
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Estilos para el fondo y el modal */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Contenedor que oscurece el fondo y centra el modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998;
+}
+
+/* El modal en sí */
+.modal {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 500px;
+    z-index: 9999;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #D1D5DB;
+    transition: border-color 0.2s;
+    background-color: #F9FAFB;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* --- NUEVOS ESTILOS --- */
+
+/* Caja para mostrar la información del vehículo seleccionado */
+.info-vehiculo {
+    background-color: #F3F4F6;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: -0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Mensaje de error dentro de la caja de información */
+.info-vehiculo .error {
+    color: #EF4444;
+    font-weight: 600;
+}
+
+/* Botón de envío */
+.btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #1F2937;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #374151;
+}
+
+/* Estilo para el botón cuando está desactivado */
+.btn-submit:disabled {
+    background-color: #9CA3AF;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.btn-submit:disabled:hover {
+    background-color: #9CA3AF;
+}
+
+/* Estilos para el overlay y el contenido del modal */
+.modal-overlay {
+    position: fixed; /* Se queda fijo en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    
+    /* Centra el contenido del modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000; /* Se asegura de que esté por encima de todo */
+
+    /* Empieza oculto y se mostrará con JavaScript */
+    display: none; 
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px; /* Un poco más ancho para todos los campos */
+    position: relative;
+    max-height: 90vh; /* Altura máxima para que no se salga de la pantalla */
+    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+/* Botón para cerrar el modal */
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-button:hover {
+    color: #374151;
+}
+
+/* Títulos y etiquetas dentro del modal */
+.modal-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Campos de texto y selectores */
+.modal-content input, .modal-content select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+}
+
+/* Botón de envío */
+.modal-content button {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #1F2937;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-content button:hover {
+    background-color: #374151;
+}
+
+/* Divisor y grilla para el formulario */
+.form-divider {
+    border-top: 1px solid #e5e7eb;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+}
+.form-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Una columna por defecto */
+    gap: 0.5rem 1.5rem; /* Espaciado entre filas y columnas */
+}
+/* Dos columnas para pantallas más grandes */
+@media (min-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ======================================================================
+    CSS PARA EL MODAL DE PREVISUALIZACIÓN DE IMAGEN
+
+
+/* Contenedor que oscurece el fondo y centra el modal */
+.image-modal-overlay {
+    display: none; /* Oculto por defecto, se muestra con JS */
+    position: fixed;
+    z-index: 1001; /* Por encima de otros modales si es necesario */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+/* Contenido del modal (la imagen y su descripción) */
+.image-modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.image-modal-content img {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh; /* Altura máxima de la imagen */
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.image-modal-content figcaption {
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    margin-top: 15px;
+    font-size: 1.2rem;
+}
+
+/* Botón para cerrar el modal (la 'X') */
+.image-modal-close-button {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.image-modal-close-button:hover {
+    transform: scale(1.2);
+}
+
+
+/* Estilo para el botón "Ver", para que sea consistente */
+.btn-view {
+    background-color: #17a2b8; /* Un color cian o el que prefieras */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-view:hover {
+    background-color: #138496; /* Un tono más oscuro */
+}
+
+.exit-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #E53E3E; /* Rojo */
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.exit-btn:hover {
+    background-color: #C53030; /* Rojo más oscuro */
+}
+
+/* Botón para Confirmar Ingreso (ya lo tenías) */
+.confirm-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #2D3748; /* Verde oscuro/Azul oscuro */
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* Botón para Registrar Salida */
+.exit-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #E53E3E; /* Rojo */
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.exit-btn:hover {
+    background-color: #C53030; /* Rojo más oscuro */
+}
+
+/* Botón para Confirmar Ingreso (ya lo tenías) */
+.confirm-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #2D3748; /* Verde oscuro/Azul oscuro */
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* --- ESTILOS PARA REPORTES INTERACTIVOS --- */
+/* Añade esto al final de tu style.css */
+
+.summary-card-clickable {
+    display: block;
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.summary-card-clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card-clickable h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.summary-card-clickable p {
+    margin-top: 0.5rem;
+    color: #4b5563;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    height: 0.65rem;
+    margin-top: 0.75rem;
+}
+
+.progress-bar {
+    background-color: #3b82f6;
+    height: 100%;
+    border-radius: 9999px;
+}
+
+.percentage {
+    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 0.25rem;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+}
+
+.btn-back:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================
+   ESTILOS PARA EL DASHBOARD VISUAL (ESTADO EN TIEMPO REAL)
+   Añade este código a tu archivo style.css
+   ========================================================== */
+
+/* Contenedor principal de la sección */
+.dashboard-container {
+    padding: 2rem;
+}
+
+/* --- ESTILOS PARA LAS TARJETAS DE RESUMEN --- */
+.summary-cards-grid {
+    display: grid;
+    /* Crea columnas flexibles que se adaptan al tamaño */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.summary-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.summary-card .card-info h3 {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    color: #64748b; /* slate-500 */
+}
+
+.summary-card .card-info .count {
+    font-size: 2.25rem; /* 36px */
+    font-weight: 700;
+    color: #1e293b; /* slate-800 */
+    margin-top: 0.5rem;
+}
+
+.summary-card .card-icon {
+    font-size: 1.75rem; /* 28px */
+    padding: 1rem;
+    border-radius: 0.75rem;
+    color: white;
+}
+
+/* Colores de fondo para los íconos de las tarjetas */
+.icon-total { background-color: #3b82f6; } /* blue-500 */
+.icon-ocupado { background-color: #ef4444; } /* red-500 */
+.icon-disponible { background-color: #22c55e; } /* green-500 */
+.icon-reservado { background-color: #f97316; } /* orange-500 */
+
+
+/* --- ESTILOS PARA EL MAPA DE ESTACIONAMIENTO --- */
+.parking-map-view h2 {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.parking-zone {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    margin-bottom: 2rem;
+}
+
+.parking-zone h3 {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.space-grid {
+    display: grid;
+    /* Crea columnas flexibles para los espacios */
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 1rem;
+}
+
+.parking-spot {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.125rem;
+    border-radius: 0.5rem;
+    border: 2px solid;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.parking-spot:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Colores de los estados para los espacios */
+.parking-spot.disponible {
+    background-color: #f0fdf4; /* green-50 */
+    color: #16a34a; /* green-600 */
+    border-color: #86efac; /* green-300 */
+}
+.parking-spot.ocupado {
+    background-color: #fef2f2; /* red-50 */
+    color: #dc2626; /* red-600 */
+    border-color: #fca5a5; /* red-300 */
+}
+.parking-spot.reservado {
+    background-color: #fff7ed; /* orange-50 */
+    color: #ea580c; /* orange-600 */
+    border-color: #fdba74; /* orange-300 */
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.modal-overlay[style*="display: flex"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay[style*="display: flex"] .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #9ca3af;
+    line-height: 1;
+}
+
+.details-list {
+    list-style: none;
+    padding: 0;
+    font-size: 1rem;
+}
+
+.details-list li {
+    padding: 0.6rem 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.details-list li strong {
+    color: #4b5563;
+}
+
+.details-list li span {
+    color: #1f2937;
+    font-weight: 500;
+    text-align: right;
+}
+
+.details-list hr {
+    margin: 0.5rem 0;
+    border: none;
+    border-top: 1px solid #f3f4f6;
+}
+
+/* ==========================================================
+   === MEDIA QUERIES PARA DISEÑO RESPONSIVO ===
+   ========================================================== */
+
+/* --- Tablets y pantallas medianas (hasta 992px) --- */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+}
+
+/* --- Celulares y pantallas pequeñas (hasta 768px) --- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px; /* Sidebar colapsado solo a íconos */
+    }
+    .sidebar-header h3,
+    .sidebar-footer {
+        display: none; /* Oculta el texto para compactar */
+    }
+    .sidebar-menu li a {
+        justify-content: center; /* Centra el ícono */
+        padding: 1.25rem 0;
+        font-size: 0; /* TRUCO: Oculta el texto del enlace */
+    }
+    .sidebar-menu li a i {
+        margin-right: 0;
+        font-size: 1.5rem; /* Restaura el tamaño del ícono */
+    }
+
+    .main-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+        padding: 1rem;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
+    .toolbar h2 {
+        font-size: 1.5rem;
+    }
+
+    .summary-cards-grid {
+        grid-template-columns: 1fr 1fr; /* Dos tarjetas por fila */
+    }
+
+    .space-grid {
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .parking-spot {
+        height: 50px;
+        font-size: 1rem;
+    }
+}
+
+/* --- Celulares muy pequeños (hasta 480px) --- */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px;
+    }
+    .main-content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .summary-cards-grid {
+        grid-template-columns: 1fr; /* Una tarjeta por fila */
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .btn-new-register {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+
+/* ==========================================================
+    === ESTILOS PARA EL BACKUP DE DATOS ===
+   ========================================================== */

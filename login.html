@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Estacionamiento U</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="login-box">
+    <h2>Iniciar Sesión</h2>
+    <form onsubmit="login(event)">
+      <label for="codigo">Código de Usuario</label>
+      <input type="text" id="codigo" required oninput="togglePasswordState()">
+
+      <label for="clave">Contraseña</label>
+      <input type="password" id="clave" required disabled>
+
+      <label for="rol">Rol</label>
+      <select id="rol" required>
+        <option value="estudiante">Estudiante</option>
+        <option value="docente">Docente</option>
+        <option value="administrativo">Administrador</option>
+        <option value="visitante">Visitante</option>
+        <option value="operador">Operador</option>
+
+      </select>
+
+      <button type="submit">Ingresar</button>
+    </form>
+  </div>
+
+ <script>
+    function togglePasswordState() {
+      const codigoInput = document.getElementById('codigo');
+      const claveInput = document.getElementById('clave');
+      if (codigoInput.value.trim() !== '') {
+        claveInput.disabled = false;
+      } else {
+        claveInput.disabled = true;
+      }
+    }
+
+    async function login(event) {
+      event.preventDefault(); 
+      
+      const codigoInput = document.getElementById('codigo');
+      const claveInput = document.getElementById('clave');
+      const rolInput = document.getElementById('rol');
+      
+      const codigo = codigoInput.value.trim();
+      const clave = claveInput.value.trim();
+      const rol = rolInput.value;
+
+      if (!codigo || !clave || !rol) {
+        alert('Por favor, complete todos los campos.');
+        return;
+      }
+
+      // --- LÓGICA DE VALIDACIÓN CORREGIDA ---
+      // Se salta las validaciones si el código es 'admin' O 'operador'.
+      const codigoLower = codigo.toLowerCase();
+      if (codigoLower !== 'admin' && codigoLower !== 'operador') {
+          if (codigo.length !== 9) {
+              alert('El código debe tener exactamente 9 caracteres.');
+              return;
+          }
+          if (clave.length !== 8) {
+              alert('La contraseña (DNI) debe tener exactamente 8 dígitos.');
+              return;
+          }
+          const primeraLetra = codigo.charAt(0).toUpperCase();
+          if (rol === 'estudiante' && primeraLetra !== 'U') {
+              alert("El código para 'Estudiante' debe empezar con 'U'.");
+              return;
+          }
+          if (rol === 'docente' && primeraLetra !== 'C') {
+              alert("El código para 'Docente' debe empezar con 'C'.");
+              return;
+          }
+          // El valor en el HTML es 'personal', no 'personal administrativo'
+          if (rol === 'personal' && primeraLetra !== 'A') {
+              alert("El código para 'Personal Administrativo' debe empezar con 'A'.");
+              return;
+          }
+      }
+    try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codigo: codigo, clave: clave, rol: rol })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(`Error: ${data.error}`);
+        } else {
+          const usuario = data.usuario;
+
+          const loggedInUser = {
+              id: usuario.id_usuario,
+              codigo: usuario.codigo,
+              nombre: usuario.nombre,
+              rol: usuario.rol
+          };
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+          alert(`¡Bienvenido, ${usuario.nombre}!`);
+
+          // --- LÓGICA DE REDIRECCIÓN CORREGIDA ---
+          let redirectPage;
+
+          switch(usuario.rol) {
+            case 'admin':
+            case 'administrador':
+              redirectPage = 'index.html'; 
+              break;
+            case 'operador':
+              redirectPage = 'operador.html';
+              break;
+            case 'estudiante':
+            case 'docente':
+            case 'personal': // El valor en el HTML es 'personal'
+              // ¡CAMBIO! Redirige a los usuarios a la vista de Estado en Tiempo Real.
+              redirectPage = 'index.html#espacios'; 
+              break;
+            default:
+              // Por seguridad, si el rol no se reconoce, va a la página principal.
+              redirectPage = 'index.html';
+          }
+          
+          window.location.href = redirectPage;
+        }
+
+      } catch (error) {
+        console.error('Error de conexión:', error);
+        alert('No se pudo conectar con el servidor. Verifica que esté funcionando.');
+      }
+    }  
+    
+    document.addEventListener('DOMContentLoaded', togglePasswordState);
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Ingresos - Operador</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Se enlaza la hoja de estilos externa (puedes mantenerla o quitarla si ya no la necesitas) -->
+    <link rel="stylesheet" href="operador.css">
+</head>
+<body>
+    <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+
+    <div class="container">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Panel del Operador</h1>
+            <p id="operador-nombre" class="text-lg text-gray-600 mt-2">Verificación de Ingresos con Reserva</p>
+        </header>
+
+        <!-- Barra de Búsqueda -->
+        <div class="mb-6">
+            <input type="search" id="search-input" placeholder="Buscar por placa, nombre o apellido..." class="w-full p-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+        </div>
+
+        <!-- Resultados de la Búsqueda -->
+        <div id="results-container">
+            <div id="placeholder-text" class="text-center text-gray-500 py-10">
+                <p>Ingrese un término de búsqueda para ver las reservas activas.</p>
+            </div>
+            <!-- Las tarjetas de reserva se insertarán aquí -->
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('results-container');
+        const placeholderText = document.getElementById('placeholder-text');
+        const operadorNombreEl = document.getElementById('operador-nombre');
+        let searchTimeout;
+
+        // Personalizar bienvenida y verificar sesión
+        const usuario = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (!usuario || usuario.rol !== 'operador') {
+            alert('Acceso no autorizado. Redirigiendo al login.');
+            window.location.href = './login.html';
+            return;
+        }
+        operadorNombreEl.textContent = `Bienvenido, ${usuario.nombre}`;
+
+        // Función para buscar registros
+        const buscarRegistros = async () => {
+            const busqueda = searchInput.value.trim();
+            if (busqueda.length < 2) {
+                resultsContainer.innerHTML = '';
+                placeholderText.innerHTML = '<p>Ingrese al menos 2 caracteres para buscar.</p>';
+                resultsContainer.appendChild(placeholderText);
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/reservas/activas/${busqueda}`);
+                if (!response.ok) throw new Error('Error en el servidor.');
+                
+                const registros = await response.json();
+                mostrarResultados(registros);
+
+            } catch (error) {
+                console.error('Error al buscar registros:', error);
+                placeholderText.innerHTML = '<p>Ocurrió un error al buscar los registros.</p>';
+                resultsContainer.innerHTML = '';
+                resultsContainer.appendChild(placeholderText);
+            }
+        };
+
+        // --- FUNCIÓN MOSTRAR RESULTADOS (ACTUALIZADA CON ESTILOS DE BOTÓN) ---
+        const mostrarResultados = (registros) => {
+            resultsContainer.innerHTML = ''; 
+            if (registros.length === 0) {
+                placeholderText.innerHTML = '<p>No se encontraron vehículos reservados u ocupados que coincidan.</p>';
+                resultsContainer.appendChild(placeholderText);
+                return;
+            }
+
+            registros.forEach(registro => {
+                const card = document.createElement('div');
+                card.className = `card grid grid-cols-1 md:grid-cols-3 gap-4 items-center`;
+                
+                let actionButtonHTML = '';
+                let fechaLabel = '';
+
+                // Se decide qué botón mostrar según el estado
+                if (registro.estado === 'reservado') {
+                    // ==================================================================
+                    // === CAMBIO AQUÍ: Se aplican los estilos de Tailwind al botón VERDE
+                    // ==================================================================
+                    actionButtonHTML = `
+                        <button data-id-reserva="${registro.id_reserva}" class="confirm-btn font-bold bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-400">
+                            Confirmar Ingreso
+                        </button>`;
+                    fechaLabel = 'Reservado';
+                } else if (registro.estado === 'ocupado') {
+                    // =================================================================
+                    // === CAMBIO AQUÍ: Se aplican los estilos de Tailwind al botón ROJO
+                    // =================================================================
+                    actionButtonHTML = `
+                        <button data-id-acceso="${registro.id_acceso}" class="exit-btn font-bold bg-red-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-400">
+                            Registrar Salida
+                        </button>`;
+                    fechaLabel = 'Ingreso';
+                }
+
+                const fecha = new Date(registro.fecha_hora_reserva).toLocaleString('es-PE');
+
+                card.innerHTML = `
+                    <div class="md:col-span-2">
+                        <h3 class="text-xl font-bold text-gray-900">${registro.placa}</h3>
+                        <p class="text-gray-600">${registro.nombre} ${registro.apellido || ''}</p>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Ubicación: <span class="font-semibold">${registro.ubicacion}</span> | ${fechaLabel}: ${fecha}
+                        </p>
+                    </div>
+                    <div class="flex justify-end">
+                        ${actionButtonHTML}
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        };
+
+        // Event listener para la búsqueda (keyup con debounce)
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                buscarRegistros();
+            }, 300); 
+        });
+
+        // --- EVENT LISTENER ACTUALIZADO PARA AMBOS BOTONES ---
+        resultsContainer.addEventListener('click', async (event) => {
+            const boton = event.target.closest('button');
+            if (!boton) return;
+
+            // Lógica para confirmar ingreso
+            if (boton.classList.contains('confirm-btn')) {
+                const idReserva = boton.dataset.idReserva;
+                if (!window.confirm(`¿Confirmar ingreso para la reserva #${idReserva}?`)) return;
+                
+                boton.disabled = true;
+                boton.textContent = 'Procesando...';
+                try {
+                    const response = await fetch('/api/reservas/confirmar-ingreso', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_reserva: idReserva })
+                    });
+                    const resultado = await response.json();
+                    if (!response.ok) throw new Error(resultado.error || 'Error desconocido');
+                    alert(resultado.message);
+                    boton.closest('.card').remove();
+                } catch (error) {
+                    alert(`Error: ${error.message}`);
+                    boton.disabled = false;
+                    boton.textContent = 'Confirmar Ingreso';
+                }
+            }
+
+            // Lógica para registrar salida
+            if (boton.classList.contains('exit-btn')) {
+                const idAcceso = boton.dataset.idAcceso;
+                if (!window.confirm(`¿Registrar salida para el acceso #${idAcceso}?`)) return;
+
+                boton.disabled = true;
+                boton.textContent = 'Procesando...';
+                try {
+                    // Esta ruta ya la tienes en tu script principal para registrar la salida
+                    const response = await fetch(`/api/accesos/${idAcceso}`, { method: 'DELETE' });
+                    const resultado = await response.json();
+                    if (!response.ok) throw new Error(resultado.error || 'Error desconocido');
+                    alert(resultado.message);
+                    boton.closest('.card').remove();
+                } catch (error) {
+                    alert(`Error al registrar la salida: ${error.message}`);
+                    boton.disabled = false;
+                    boton.textContent = 'Registrar Salida';
+                }
+            }
+        });
+    });
+
+    function logout() {
+        if (confirm("¿Está seguro de que desea cerrar sesión?")) {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = './login.html';
+        }
+    }
+    </script>
+
+</body>
+</html>

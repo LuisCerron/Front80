@@ -1,0 +1,55 @@
+body {
+    background-color: #f3f4f6;
+    font-family: 'Inter', sans-serif;
+}
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+.card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 1;
+    transform: scale(1);
+}
+.card:not(:last-child) {
+    margin-bottom: 1rem;
+}
+.card.removing {
+    transform: scale(0.9);
+    opacity: 0;
+}
+.confirm-btn {
+    background-color: #10B981;
+    color: white;
+    transition: background-color 0.2s;
+    width: 100%;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+.confirm-btn:hover {
+    background-color: #059669;
+}
+.confirm-btn:disabled {
+    background-color: #9CA3AF;
+    cursor: not-allowed;
+}
+.logout-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ef4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}

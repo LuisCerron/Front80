@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- En el <head> de tu index.html -->
+<title>Sistema de Gestión de Estacionamiento - Universidad</title>
+<!-- Chart.js para los gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!-- Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Enlace al archivo CSS externo -->
+<link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-car-side"></i> Parking Sistema UTP</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active" id="menu-dashboard"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li id="menu-espacios"><a href="#espacios"><i class="fas fa-th-large"></i> Estado en Tiempo Real</a></li>
+            <li id="menu-usuarios"><a href="#usuarios"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li id="menu-vehiculos"><a href="#vehiculos"><i class="fas fa-car"></i> Vehículos</a></li>
+            <li id="menu-reportes"><a href="#reportes"><i class="fas fa-file-alt"></i> Reportes</a></li>
+            <li id="menu-configuracion"><a href="#configuracion"><i class="fas fa-cogs"></i> Configuración</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Versión 1.1.0</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="user-info">
+                <img src="https://placehold.co/40x40/607d8b/ffffff?text=A" alt="Avatar" class="avatar" id="userAvatar">
+                <div>
+                    <strong id="userName">Cargando...</strong>
+                    <small id="userRole">Online</small>
+                </div>
+            </div>
+           
+        </header>
+
+        <main>
+            <!-- Sección Dashboard -->
+            <div id="dashboard" class="content-section active">
+                <div class="toolbar">
+                    <h2><i class="fas fa-list-alt"></i> Vehículos Estacionados</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Placa</th>
+                                <th>Tipo Vehículo</th>
+                                <th>Propietario</th>
+                                <th>Hora Ingreso</th>
+                                <th>Ubicación</th>
+                                <th class="columna-acciones">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parkingTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="espacios" class="content-section">
+    <div id="admin-espacios-view" class="dashboard-container" style="display: none;">
+        <div class="toolbar">
+            <h2><i class="fas fa-th-large"></i> Estado del Estacionamiento</h2>
+            <button id="btn-new-access" class="btn-new-register boton-admin">
+                <i class="fas fa-plus-circle"></i> Registrar Ingreso
+            </button>
+        </div>
+        <div id="summary-cards-container" class="summary-cards-grid">
+            <p>Cargando resumen...</p>
+        </div>
+
+        <div id="parking-map-view">
+            <h2 class="mt-8">Situación de Espacios</h2>
+            <div id="parking-zones-container">
+                <p>Cargando mapa de espacios...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-espacios-view" style="display: none;">
+        <div class="toolbar">
+            <h2><i class="fas fa-th-large"></i> Estado del Estacionamiento en Tiempo Real</h2>
+            <button id="userLogoutButton" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+        <div id="parking-map-container">
+        </div>
+    </div>
+</div>
+
+
+            <!-- Sección Usuarios -->
+            <div id="usuarios" class="content-section">
+                <div class="toolbar">
+                    <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+                    <button id="add-user-btn" class="btn-new-register boton-admin"><i class="fas fa-user-plus"></i> Agregar Usuario</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Rol</th>
+                                <th>Email</th>
+                                <th>Activo</th>
+                                <th class="columna-acciones">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Sección Vehículos -->
+            <div id="vehiculos" class="content-section">
+                <div class="toolbar">
+                    <h2><i class="fas fa-car"></i> Gestión de Vehículos</h2>
+                    <button id="add-vehicle-btn" class="btn-new-register boton-admin"><i class="fas fa-plus-circle"></i> Agregar Vehículo</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Placa</th>
+                                <th>Tipo</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Color</th>
+                                <th>ID Usuario</th>
+                                <th>Imagen</th>
+                                <th class="columna-acciones">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehicleTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE REPORTES -->
+            <div id="reportes" class="content-section">
+                <h2><i class="fas fa-file-invoice"></i> Reportes</h2>
+                <p class="subtitle">Seleccione una categoría y luego un reporte para generar la información.</p>
+                <div class="reports-grid">
+                    <div class="report-card ocupacion">
+                        <div class="card-header">
+                            <i class="fas fa-layer-group"></i>
+                            <h3>Ocupación y Optimización</h3>
+                        </div>
+                        <ul class="report-list">
+                            <li><a href="#" data-report="ocupacion-zonas"><i class="fas fa-chart-pie"></i> Ocupación por Zonas</a></li>
+                            <li><a href="#" data-report="horas-pico"><i class="fas fa-chart-line"></i> Reporte de Horas Pico</a></li>
+                        </ul>
+                    </div>
+                    <div class="report-card admin">
+                        <div class="card-header">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>Seguridad y Control de Acceso</h3>
+                        </div>
+                        <ul class="report-list">
+                            <li><a href="#" data-report="historial-placa"><i class="fas fa-search-location"></i> Historial por Placa</a></li>
+                            <li><a href="#"><i class="fas fa-moon"></i> Larga Estancia</a></li>
+                        </ul>
+                    </div>
+                    <div class="report-card usuarios">
+                        <div class="card-header">
+                            <i class="fas fa-gavel"></i>
+                            <h3>Comportamiento</h3>
+                        </div>
+                        <ul class="report-list">
+                            <li><a href="#" data-report="uso-por-rol"><i class="fas fa-users"></i> Reporte por Rol</a></li>
+                            <li><a href="#"><i class="fas fa-signal"></i> Frecuencia de Uso</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="reportResultContainer" style="display: none;"></div>
+            </div>
+            
+            <!-- SECCIÓN DE CONFIGURACIÓN -->
+            <!-- 
+======================================================================
+ 
+======================================================================
+Instrucciones:.
+-->
+
+<div id="configuracion" class="content-section">
+    <div class="toolbar">
+        <h2><i class="fas fa-user-cog"></i> Gestión de Usuarios</h2>
+    </div>
+    <div class="filter-container">
+        <!-- TEXTO ACTUALIZADO -->
+        <p>Busque un usuario ingresando su nombre, apellido, código o la placa de su vehículo.</p>
+        
+        <form id="searchUserByPlateForm"> <!-- ID ORIGINAL MANTENIDO -->
+            <!-- PLACEHOLDER ACTUALIZADO -->
+            <input type="text" id="plateSearchInput" placeholder="Buscar por placa, nombre, apellido o código..." required>
+            <button type="submit"><i class="fas fa-search"></i> Buscar</button>
+        </form>
+    </div>
+    
+    <div class="table-container" id="userSearchResultsContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Usuario</th>
+                    <th>Nombre Completo</th>
+                    <th>Rol</th>
+                    <th>Placa</th>
+                    <th>Vehículo</th>
+                    <th class="columna-acciones">Acción</th>
+                </tr>
+            </thead>
+            <tbody id="userSearchResultsBody">
+                <tr>
+                    <!-- TEXTO ACTUALIZADO -->
+                    <td colspan="6" style="text-align: center;">Ingrese un término de búsqueda para encontrar un usuario.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="logout-section">
+        <hr>
+        <h3><i class="fas fa-sign-out-alt"></i> Salir del Sistema</h3>
+        <p>Al cerrar la sesión, necesitará sus credenciales para volver a ingresar.</p>
+        <button id="logoutButton" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+    </div>
+</div>
+
+    <!-- ===== TODOS LOS MODALES RESTAURADOS AQUÍ ===== -->
+
+    <!-- MODAL PARA NUEVO ACCESO -->
+    <div id="newAccessModal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="closeNewAccessModal" class="close-button">&times;</span>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Registrar Nuevo Ingreso</h3>
+      
+            <form id="formNuevoIngreso">
+
+                <div class="form-group">
+                    <label for="propietario-input">Nombre del Propietario:</label>
+                    <input type="text" id="propietario-input" name="propietario" list="lista-propietarios" placeholder="Comience a escribir un nombre..." required autocomplete="off">
+                    <datalist id="lista-propietarios"></datalist>
+                </div>
+        
+                <div class="form-group">
+                    <label for="placa">Placa del Vehículo:</label>
+                    <input type="text" id="placa" name="placa" placeholder="Se llenará automáticamente" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_vehiculo">Tipo de Vehículo:</label>
+                    <input type="text" id="tipo_vehiculo" name="tipo_vehiculo" placeholder="Se llenará automáticamente" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="ubicacion">Ubicación / Espacio:</label>
+                    <select id="ubicacion" name="ubicacion" required>
+                        <option value="">-- Seleccione un espacio disponible --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mt-8">
+                    <button type="submit" class="btn-submit">Registrar Ingreso</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PARA AGREGAR NUEVO USUARIO -->
+   <div id="addUserModal" class="modal-overlay">
+
+    <!-- Este es el contenido visible del modal -->
+    <div class="modal-content">
+        <span id="closeUserModalButton" class="close-button">&times;</span>
+        <h2>Agregar Nuevo Usuario y Vehículo</h2>
+
+        <form id="registroForm">
+            <!-- Datos del Usuario -->
+            <h3 class="form-section-title">Datos Personales</h3>
+            <div class="form-grid">
+                <div>
+                    <label for="codigo_utp">Código UTP:</label>
+                    <input type="text" id="codigo_utp" required>
+                </div>
+                <div>
+                    <label for="dni">DNI (será su contraseña):</label>
+                    <input type="text" id="dni" maxlength="8" required>
+                </div>
+                <div>
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div>
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" required>
+                </div>
+                <div>
+                    <label for="rol">Rol:</label>
+                    <select id="rol" required>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Docente">Docente</option>
+                        <option value="Administrativo">Administrativo</option>
+                        <option value="Visitante">Visitante</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                 <div>
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" id="telefono">
+                </div>
+            </div>
+            
+            <!-- Datos del Vehículo -->
+            <div class="form-divider">
+                 <h3 class="form-section-title">Datos del Vehículo Principal</h3>
+                 <div class="form-grid">
+                    <div>
+                        <label for="placa">Placa:</label>
+                        <input type="text" id="placa" required>
+                    </div>
+                     <div>
+                        <label for="tipo_vehiculo">Tipo de Vehículo:</label>
+                        <input type="text" id="tipo_vehiculo" placeholder="Ej: Auto, Moto" required>
+                    </div>
+                    <div>
+                        <label for="marca">Marca:</label>
+                        <input type="text" id="marca">
+                    </div>
+                    <div>
+                        <label for="modelo">Modelo:</label>
+                        <input type="text" id="modelo">
+                    </div>
+                     <div>
+                        <label for="color">Color:</label>
+                        <input type="text" id="color">
+                    </div>
+                 </div>
+            </div>
+
+            <button type="submit">Agregar Usuario y Vehículo</button>
+        </form>
+    </div>
+</div>
+
+    <!-- MODAL PARA EDITAR USUARIO -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Editar Usuario</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <label for="editUserCodigoUtp">Código UTP:</label>
+                <input type="text" id="editUserCodigoUtp">
+                <label for="editUserName">Nombre:</label>
+                <input type="text" id="editUserName" required>
+                <label for="editUserApellido">Apellido:</label>
+                <input type="text" id="editUserApellido" required>
+                <label for="editUserRol">Rol:</label>
+                <select id="editUserRol" required>
+                    <option value="Estudiante">Estudiante</option>
+                    <option value="Docente">Docente</option>
+                    <option value="Administrativo">Administrativo</option>
+                    <option value="Visitante">Visitante</option>
+                </select>
+                <label for="editUserEmail">Email:</label>
+                <input type="email" id="editUserEmail" required>
+                <label for="editUserTelefono">Teléfono:</label>
+                <input type="text" id="editUserTelefono">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="editUserActivo">
+                    <label for="editUserActivo">Activo</label>
+                </div>
+                <button type="submit">Guardar Cambios</button>
+            </form>
+            <p id="mensajeEditUsuario" class="mensaje-form"></p>
+        </div>
+    </div>
+
+    <!-- MODAL PARA AGREGAR/EDITAR VEHÍCULO -->
+    <div id="vehicleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="vehicleModalTitle">Agregar Vehículo</h2>
+            <form id="vehicleForm">
+                <input type="hidden" id="vehicleId">
+                <label for="vehicleUserId">ID del Propietario (Usuario):</label>
+                <input type="number" id="vehicleUserId" required>
+                <label for="vehiclePlaca">Placa:</label>
+                <input type="text" id="vehiclePlaca" required>
+                <label for="vehicleType">Tipo de Vehículo:</label>
+                <select id="vehicleType" required>
+                    <option value="Auto">Auto</option>
+                    <option value="Moto">Moto</option>
+                    <option value="Bicicleta">Bicicleta</option>
+                </select>
+                <label for="vehicleMarca">Marca:</label>
+                <input type="text" id="vehicleMarca">
+                <label for="vehicleModelo">Modelo:</label>
+                <input type="text" id="vehicleModelo">
+                <label for="vehicleColor">Color:</label>
+                <input type="text" id="vehicleColor">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="vehicleActivo" checked>
+                    <label for="vehicleActivo">Activo</label>
+                </div>
+                <button type="submit">Guardar Vehículo</button>
+            </form>
+            <p id="mensajeFormVehiculo" class="mensaje-form"></p>
+        </div>
+    </div>
+    
+
+    
+    <!-- MODAL DE RESERVA -->
+    <div id="reservationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeReservationModal">&times;</span>
+            <h2>Confirmar Reserva</h2>
+            <p id="reservationModalText">¿Estás seguro de que quieres reservar este espacio? Solo tendra 10 minutos para ocpusr el espacio</p>
+            <div class="modal-actions">
+                <button id="cancelReservationBtn" class="btn-secondary">Cancelar</button>
+                <button id="confirmReservationBtn" class="btn-primary">Confirmar Reserva</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="space-details-modal" class="modal-overlay" style="display: none;" onclick="if (event.target === this) this.style.display = 'none'">
+    <div class="modal-content" id="space-details-content">
+        <!-- El contenido se generará con JavaScript -->
+    </div>
+</div>
+    <!-- 2. nuevo modal al final de tu archivo, antes del script.js -->
+
+<div id="imagePreviewModal" class="image-modal-overlay">
+    <div class="image-modal-content">
+        <span class="image-modal-close-button">&times;</span>
+        <figure>
+            <img id="modalImage" src="" alt="Vista previa del vehículo">
+            <figcaption id="modalCaption"></figcaption>
+        </figure>
+    </div>
+</div>
+
+    <!-- El script.js al final, antes de cerrar el body -->
+    <script src="script.js"></script>
+</body>
+</html>
